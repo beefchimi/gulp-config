@@ -1,0 +1,44 @@
+{
+  "name": "gulp-config",
+  "version": "0.0.1",
+  "description": "Hey everybody, its a Scroll Party!",
+  "main": "gulpfile.js",
+  "devDependencies": {
+    "gulp": "^3.8.7",
+    "gulp-autoprefixer": "^0.0.10",
+    "gulp-changed": "^1.0.0",
+    "gulp-concat": "^2.3.4",
+    "gulp-imagemin": "^1.0.1",
+    "gulp-inject": "^1.0.2",
+    "gulp-jshint": "^1.8.4",
+    "gulp-livereload": "^2.1.1",
+    "gulp-load-plugins": "^0.6.0",
+    "gulp-minify-css": "^0.3.7",
+    "gulp-rename": "^1.2.0",
+    "gulp-rimraf": "^0.1.0",
+    "gulp-rsync": "^0.0.4",
+    "gulp-ruby-haml": "^0.0.3",
+    "gulp-ruby-sass": "^0.7.1",
+    "gulp-svgmin": "^0.4.6",
+    "gulp-svgstore": "^1.0.1",
+    "gulp-uglify": "^0.3.2",
+    "gulp-util": "^3.0.1",
+    "imagemin-pngcrush": "^0.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/beefchimi/gulp-config.git"
+  },
+  "keywords": [
+    "scroll",
+    "love"
+  ],
+  "author": "Curtis Dulmage",
+  "bugs": {
+    "url": "https://github.com/beefchimi/gulp-config/issues"
+  },
+  "homepage": "https://github.com/beefchimi/gulp-config"
+}
