@@ -8,6 +8,9 @@
 logs
 *.log
 
+# Ignore secrets.json
+secrets.json
+
 # Ignore build directory
 build
 
