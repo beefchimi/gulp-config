@@ -1,41 +1,43 @@
 /* Variables / Environment Setup
 ---------------------------------------------------------------------------- */
 
+// gulp requires
+var gulp       = require('gulp'),
+	gutil      = require('gulp-util'),
+	livereload = require('gulp-livereload'),
+	del        = require('del'),
+	pngcrush   = require('imagemin-pngcrush'),
+	secrets    = require('./secrets.json'),
+	plugins    = require('gulp-load-plugins')({
+		pattern: ['gulp-*', 'gulp.*'],
+		replaceString: /\bgulp[\-.]/
+	});
+
+
 // source / destination paths
 var paths = {
 
 	haml: {
 		src: 'dev/haml/',
-		dest: '/'
+		dest: 'build/'
 	},
 	styles: {
 		src: 'dev/styles/',
-		dest: 'assets/'
+		dest: 'build/assets/css/'
 	},
 	scripts: {
 		src: 'dev/scripts/*.js',
-		dest: 'assets/'
+		dest: 'build/assets/js/'
 	},
 	images: {
 		src: 'dev/media/images/*.{png,jpg,gif}',
-		dest: 'assets/media/'
+		dest: 'build/assets/img/'
 	},
 	svg: {
-		src: 'dev/media/svg/*.svg',
-		dest: 'assets/media/'
+		src: 'dev/media/svg/*.svg' // , dest: 'build/assets/svg/'
 	}
 
 };
-
-// gulp requires
-var gulp       = require('gulp'),
-	gutil      = require('gulp-util'),
-	livereload = require('gulp-livereload'),
-	pngcrush   = require('imagemin-pngcrush'),
-	plugins    = require('gulp-load-plugins')({
-		pattern: ['gulp-*', 'gulp.*'],
-		replaceString: /\bgulp[\-.]/
-	});
 
 
 // run "gulp *task* --dev" for more verbose output
@@ -50,29 +52,24 @@ if (gutil.env.dev === true) {
 }
 
 
-// gulp utility output
-var changeEvent = function(evt) {
-	gutil.log('File', gutil.colors.cyan(evt.path.replace(new RegExp('/.*(?=/' + paths.src + ')/'), '')), 'was', gutil.colors.magenta(evt.type));
-};
-
-
 /* Gulp Tasks
 ---------------------------------------------------------------------------- */
 
 // Delete all build files
-gulp.task('rimraf', function() {
-	return gulp.src(['assets/', 'index.html'], { read: false })
-		.pipe(plugins.rimraf());
+gulp.task('clean', function(cb) {
+
+	del(['build/assets/css/**', 'build/assets/js/scripts.js', 'build/assets/img/**', 'build/index.html'], cb);
+
 });
 
 
 // Compile Haml with double quotes
 gulp.task('haml', function() {
 
-	gulp.src(paths.haml.src + 'main.html.haml') // , {read: false}
+	return gulp.src(paths.haml.src + 'main.html.haml') // , {read: false}
 		.pipe(plugins.rubyHaml()) // {doubleQuote: true}
 		.pipe(plugins.rename('index.html'))
-		.pipe(gulp.dest('./'));
+		.pipe(gulp.dest(paths.haml.dest));
 
 });
 
@@ -80,7 +77,7 @@ gulp.task('haml', function() {
 // Compile and Output Styles
 gulp.task('styles', function() {
 
-	gulp.src(paths.styles.src + 'styles.scss')
+	return gulp.src(paths.styles.src + 'styles.scss')
 		.pipe(plugins.rubySass({
 			style: sassStyle,
 			sourcemap: sourceMap,
@@ -97,10 +94,10 @@ gulp.task('styles', function() {
 // Concat and Output Scripts
 gulp.task('scripts', function() {
 
-	gulp.src(paths.scripts.src)
-		.pipe(plugins.concat('scripts.js'))
-		// .pipe(plugins.jshint())
+	return gulp.src(paths.scripts.src)
+		// .pipe(plugins.jshint('.jshintrc')) // what is '.jshintrc' ?
 		// .pipe(plugins.jshint.reporter('default'))
+		.pipe(plugins.concat('scripts.js'))
 		.pipe(isProduction ? plugins.uglify() : gutil.noop())
 		.pipe(gulp.dest(paths.scripts.dest));
 
@@ -112,6 +109,7 @@ gulp.task('images', function() {
 	return gulp.src(paths.images.src)
 		.pipe(plugins.changed(paths.images.dest))
 		.pipe(plugins.imagemin({
+			optimizationLevel: 7,
 			progressive: true,
 			use: [pngcrush()]
 		}))
@@ -134,7 +132,10 @@ gulp.task('svg', function() {
 							// prefix: 'icon-',
 							inlineSvg: true,
 							transformSvg: function(svg, cb) {
-								svg.attr({ style: 'display:none' });
+								svg.attr({
+									id: 'master-vector',
+									style: 'display:none'
+								});
 								cb(null);
 							}
 						}));
@@ -143,38 +144,49 @@ gulp.task('svg', function() {
 		return file.contents.toString('utf8');
 	}
 
-	return gulp.src('index.html')
+	return gulp.src(paths.haml.dest + 'index.html')
 				.pipe(plugins.inject(svgOutput, { transform: fileContents }))
-				.pipe(gulp.dest('./'))
+				.pipe(gulp.dest(paths.haml.dest));
 
 });
 
 
-/*
+// Use rsync to deploy to server (no need to exclude files since everything comes from 'build' folder)
 gulp.task('deploy', function() {
-	gulp.src('./')
-		.pipe(rsync({
+	gulp.src('build/**')
+		.pipe(plugins.rsync({
 			root: 'build',
-			hostname: 'example.com',
-			destination: '/path/to/site'
-		});
+			hostname: secrets.servers.rsync.host,
+			destination: secrets.servers.rsync.dest,
+			incremental: true,
+			progress: true,
+			recursive: true,
+			clean: true,
+			exclude: ['.DS_Store']
+		}));
 });
-*/
 
 
-// Watch over specified files and run corresponding tasks
+// Watch over specified files and run corresponding tasks...
+// does not inject SVG... need better process for this
 gulp.task('watch', ['haml', 'styles', 'scripts'], function() {
 
-	livereload.listen();
+	// watch dev files, rebuild when changed
+	gulp.watch(paths.haml.src + '*.haml', ['haml']);
+	gulp.watch(paths.styles.src + '*.scss', ['styles']);
+	gulp.watch(paths.scripts.src, ['scripts']);
 
-	gulp.watch(paths.haml.src + '*.haml', ['haml']).on('change', livereload.changed);
-
-	gulp.watch(paths.styles.src + '*.scss', ['styles']).on('change', livereload.changed);
-
-	gulp.watch(paths.scripts.src, ['scripts']).on('change', livereload.changed);
+	// start livereload server and refresh page whenever build files are updated
+	livereload.listen(); // errors with livereload?
+	gulp.watch('build/**').on('change', livereload.changed);
 
 });
 
 
-// Default gulp task
-gulp.task('default', ['haml', 'styles', 'scripts']);
+// Default gulp task - requires HAML to be compiled before injecting SVG
+// Should run gulp clean prior to running the default task
+gulp.task('default', ['haml'], function() {
+
+	gulp.start('styles', 'scripts', 'images', 'svg');
+
+});

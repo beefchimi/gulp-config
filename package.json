@@ -4,6 +4,7 @@
   "description": "Hey everybody, its a Scroll Party!",
   "main": "gulpfile.js",
   "devDependencies": {
+    "del": "^0.1.2",
     "gulp": "^3.8.7",
     "gulp-autoprefixer": "^0.0.10",
     "gulp-changed": "^1.0.0",
@@ -15,7 +16,6 @@
     "gulp-load-plugins": "^0.6.0",
     "gulp-minify-css": "^0.3.7",
     "gulp-rename": "^1.2.0",
-    "gulp-rimraf": "^0.1.0",
     "gulp-rsync": "^0.0.4",
     "gulp-ruby-haml": "^0.0.3",
     "gulp-ruby-sass": "^0.7.1",
