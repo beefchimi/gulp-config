@@ -1,0 +1,26 @@
+!!!
+/[if IE 9] <html class="ie9" lang="en">
+<!--[if gt IE 9]><!-->
+%html{:lang => "en"}<>
+	<!--<![endif]-->
+
+	= Haml::Engine.new(File.read("dev/haml/partials/_doc_head.haml")).render
+
+	%body
+
+		#svgInject
+			/ inject:svg
+			/ endinject
+
+		%main{:role => "main"}
+
+			%section#hello.hello
+
+				%article{"data-container" => ""}
+
+					.project_content
+
+						%h1 Hello
+						%h2 I am a Gulp Boilerplate
+
+		= Haml::Engine.new(File.read("dev/haml/partials/_doc_scripts.haml")).render

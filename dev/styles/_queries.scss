@@ -1,9 +1,12 @@
-/* ==|== media queries ========================================================
-   WIDTHS: 480px / 568px / 768px / 980px
-   ========================================================================= */
+// ==|== media queries ========================================================
+// WIDTHS: 568px / 768px / 980px
+// ============================================================================
 
-@media only screen and (min-width: 48em) { /* 768px / 16px = 48em */
-
-	// insert styles
+@media only screen and (min-width: 768px) {
 
 }
+
+/*
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) { // IE10 & IE11
+}
+*/

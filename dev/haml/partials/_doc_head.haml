@@ -1,0 +1,17 @@
+%head
+
+	%meta{:charset => "utf-8"}
+	%meta{"http-equiv" => "X-UA-Compatible", :content => "IE=edge"}
+
+	%title Gulp Config
+
+	%meta{:name => "description", :content => "This is just my Gulp Config."}
+	%meta{:name => "viewport", :content => "width=device-width, initial-scale=1"}
+
+	%meta{:name => "apple-mobile-web-app-capable", :content => "yes"}
+	%meta{:name => "apple-mobile-web-app-status-bar-style", :content => "black"}
+
+	%link{:rel => "stylesheet", :href => "assets/css/styles.min.css?v=0"}
+
+	%script
+		= Haml::Engine.new(File.read("dev/haml/partials/_js_fonts.haml")).render

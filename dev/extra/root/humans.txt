@@ -1,0 +1,9 @@
+/* the humans responsible & colophon */
+/* humanstxt.org */
+
+
+/* TEAM */
+
+	Pixel Starship: Curtis Dulmage
+	Site: http://dulmage.me
+	Location: Ottawa, Ontario, Canada
