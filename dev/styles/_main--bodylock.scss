@@ -1,0 +1,11 @@
+html {
+  &,
+  body {
+    height: 100%;
+  }
+  &[data-scrollable="locked"],
+  &[data-scrollable="locked"] body {
+    overflow: hidden;
+    max-height: 100vh;
+  }
+}

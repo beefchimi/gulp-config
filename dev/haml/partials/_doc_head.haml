@@ -1,17 +1,24 @@
 %head
 
-	%meta{:charset => "utf-8"}
-	%meta{"http-equiv" => "X-UA-Compatible", :content => "IE=edge"}
+  %meta{:charset => "utf-8"}
+  %meta{"http-equiv" => "X-UA-Compatible", :content => "IE=edge"}
 
-	%title Gulp Config
+  - strPageTitle = "Testing"
 
-	%meta{:name => "description", :content => "This is just my Gulp Config."}
-	%meta{:name => "viewport", :content => "width=device-width, initial-scale=1"}
+  - if locals != ""
+    %title #{strPageTitle} | #{locals}
+  - else
+    %title #{strPageTitle}
 
-	%meta{:name => "apple-mobile-web-app-capable", :content => "yes"}
-	%meta{:name => "apple-mobile-web-app-status-bar-style", :content => "black"}
+  - if locals == "Error 404"
+    - strDescription = "You have encountered a catastrophic error. Please evacuate the internet. Thank you."
+  - else
+    - strDescription = "This is just a test."
 
-	%link{:rel => "stylesheet", :href => "assets/css/styles.min.css?v=0"}
+  %meta{:name => "description", :content => "#{strDescription}"}
+  %meta{:name => "viewport", :content => "width=device-width, initial-scale=1, shrink-to-fit=no"}
+  %meta{:name => "format-detection", :content => "telephone=no"}
+  %meta{:name => "apple-mobile-web-app-capable", :content => "yes"}
+  %meta{:name => "apple-mobile-web-app-status-bar-style", :content => "black"}
 
-	%script
-		= Haml::Engine.new(File.read("dev/haml/partials/_js_fonts.haml")).render
+  %link{:rel => "stylesheet", :href => "assets/css/styles.min.css"}

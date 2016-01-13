@@ -1,0 +1,36 @@
+// Colours
+// -----------------------------------------------------------------------------
+$hex__white:           #fff;
+$hex__sky:             #ebeef0;
+$hex__slate:           #31373d;
+$hex__blue:            #479ccf;
+$hex__green:           #96bf48;
+$hex__yellow:          #ffd117;
+$hex__red:             #ff5d5d;
+
+// Measurements
+// -----------------------------------------------------------------------------
+$unit__form-basis--large:  22rem;
+$unit__form-basis--medium: 18rem; // also: $unit__form-basis--input--zip
+$unit__form-basis--small:  12rem;
+$unit__border-radius:      0.3rem;
+
+// Easing Functions
+// -----------------------------------------------------------------------------
+$ease__out--expo:     cubic-bezier(.190,1,.220,1);
+$ease__in-out--quart: cubic-bezier(.770,0,.175,1);
+
+// Viewports
+// -----------------------------------------------------------------------------
+$vw__mobile--portrait: 32rem;
+$vw__mobile--landscape: 48rem;
+$vw__iphone6--portrait: 37.5rem;
+$vw__iphone6--landscape: 66.7rem;
+$vw__tablet--portrait: 76.8rem;
+$vw__tablet--landscape: 102.4rem;
+$vw__720p--portrait: 72rem;
+$vw__720p--landscape: 128rem;
+$vw__1080p--portrait: 108rem;
+$vw__1080p--landscape: 192rem;
+$vw__imac--portrait: 144rem;
+$vw__imac--landscape: 256rem;

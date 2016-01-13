@@ -1,167 +1,27 @@
-// ==|== primary styles =======================================================
-// Author: Curtis Dulmage
-// ============================================================================
+// ==|== main styles ===========================================================
+// =============================================================================
+
+// Placeholders & Common Classes
+// -----------------------------------------------------------------------------
+%padding__common {
+  padding: 3.2rem 1.6rem;
+}
 
 // Foundation
-// ----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 html {
-	font-family: Futura, 'Trebuchet MS', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  background-color: $hex__sky;
 }
-body {
-	position: relative;
-}
-::selection {
-	background-color: $hsl_L0;
-}
-// + autoprefixer does not recognize placeholder + \\
-::-webkit-input-placeholder {
-	color: $hsl_L0;
-}
-::-moz-placeholder {
-	color: $hsl_L0;
-	opacity: 1;
-}
-:-ms-input-placeholder {
-	color: $hsl_L0;
-}
-// --- Lock Scrolling On Load --- \\
-html {
-	min-height: 100%;
-	overflow-y: scroll;
-}
-html[data-ready="waiting"] body {
-	overflow-y: hidden;
-}
-html[data-ready="loaded"] body {
-	overflow-y: visible;
-}
-
-// Transitions & Animations
-// ----------------------------------------------------------------------------
-a,
-input,
-button,
-textarea {
-	transition: all 0.3s ease-in-out;
-}
-svg {
-	transition: fill 0.3s ease-in-out;
-}
-// --- Animations --- \\
-@keyframes animSVG {
-	to {
-		stroke-dashoffset: 0;
-	}
-}
-@keyframes anim360 {
-	to {
-		transform: rotate(360deg);
-	}
-}
-@keyframes animFadeIn {
-	to {
-		opacity: 1;
-	}
-}
-@keyframes animShow {
-	0%   { opacity: 0; }
-	100% { opacity: 1; }
-}
-@keyframes animHide {
-	0%   { opacity: 1; left: 0; }
-	99%  { opacity: 0; left: 0; }
-	100% { opacity: 0; left: -200%; }
-}
-@keyframes animShake {
-	0%, 100% {
-		transform: translate3d(0,0,0);
-	}
-	10%, 30%, 50%, 70%, 90% {
-		transform: translate3d(-1rem,0,0);
-	}
-	20%, 40%, 60%, 80% {
-		transform: translate3d(1rem,0,0);
-	}
-}
-.animate_shake {
-	animation: animShake 0.7s ease-in-out both;
-}
-// --- FOUT --- \\
-html:not(.ie9) main,
-html:not(.ie9) header,
-html:not(.ie9) footer {
-	opacity: 0; // begin by setting opacity to 0 (if not IE9)
-	animation: animShow 0.6s ease-in-out 0.2s forwards;
-}
-/*
-.wf-active main,
-.wf-active header,
-.wf-active footer {
-	animation: animShow 0.4s ease-in-out forwards;
-}
-*/
+@import 'main--bodylock';
 
 
-/*
-// CSS Loader
-// ----------------------------------------------------------------------------
-div.loader_overlay {
-	position: fixed;
-	z-index: 910;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	opacity: 0;
-	// visibility: hidden; // webkit will stop the animation if visibility is changed
-	overflow: hidden;
-	pointer-events: none;
-}
-div.loader_overlay.visible {
-	opacity: 1;
-}
-div.loader_overlay div.wrap_svg {
-	position: absolute;
-	z-index: 911;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	margin: auto;
-	width: 4.4rem;
-	height: 4.4rem;
-	animation: anim360 1s linear infinite forwards;
-}
-div.loader_overlay div.wrap_svg svg {
-	fill: $hsl_orange;
-}
-*/
+// ==|== media queries =========================================================
+// =============================================================================
 
-// General Styles
-// ----------------------------------------------------------------------------
-.wrap_element {
-	position: relative;
+@include media($vw_1080p-landscape) {
+  html { font-size: 75%; } // 12px
 }
-// + SVGs + \\
-#svgInject {
-	display: none;
-	visibility: hidden;
-}
-.wrap_svg {
-	display: block;
-}
-.wrap_svg svg {
-	width: 100%;
-	height: 100%;
-}
-svg.svg_inline {
-	display: inline; // chrome does not respect the [viewBox] selector
-}
-// --- Containers --- \\
-[data-container] {
-	margin-left: auto;
-	margin-right: auto;
-}
-[data-container="width_720"] {
-	max-width: 72rem;
+@include media($vw_imac-landscape) {
+  html { font-size: 87.5%; } // 14px
 }

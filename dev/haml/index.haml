@@ -1,26 +1,17 @@
 !!!
-/[if IE 9] <html class="ie9" lang="en">
-<!--[if gt IE 9]><!-->
-%html{:lang => "en"}<>
-	<!--<![endif]-->
+%html{:lang => "en", "data-scrollable" => "unlocked", "data-nav" => "hidden"}
 
-	= Haml::Engine.new(File.read("dev/haml/partials/_doc_head.haml")).render
+  = Haml::Engine.new(File.read("dev/haml/partials/_doc_head.haml")).render(Object.new, :locals => "Pass a variable")
 
-	%body
+  %body
 
-		#svgInject
-			/ inject:svg
-			/ endinject
+    #svgInject.visuallyhidden
+      / inject:svg
+      / endinject
 
-		%main{:role => "main"}
+    = Haml::Engine.new(File.read("dev/haml/partials/_html_header.haml")).render(Object.new, :locals => "")
 
-			%section#hello.hello
+    %main.page__main{:role => "main"}
+      = Haml::Engine.new(File.read("dev/haml/partials/_sec_1-intro.haml")).render(Object.new, :locals => "")
 
-				%article{"data-container" => ""}
-
-					.project_content
-
-						%h1 Hello
-						%h2 I am a Gulp Boilerplate
-
-		= Haml::Engine.new(File.read("dev/haml/partials/_doc_scripts.haml")).render
+    = Haml::Engine.new(File.read("dev/haml/partials/_html_footer.haml")).render(Object.new, :locals => "")

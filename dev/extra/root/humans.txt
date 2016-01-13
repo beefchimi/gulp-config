@@ -4,6 +4,6 @@
 
 /* TEAM */
 
-	Pixel Starship: Curtis Dulmage
-	Site: http://dulmage.me
-	Location: Ottawa, Ontario, Canada
+  Shopify: Curtis Dulmage
+  Site: http://shopify.ca
+  Location: Ottawa, Ontario, Canada

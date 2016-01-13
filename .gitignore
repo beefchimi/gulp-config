@@ -17,11 +17,15 @@ build
 # Ignore copyright webfonts
 dev/extra/fonts
 
-# Ignore images
-dev/media/images
+# Ignore scrap audio, images, and videos
+dev/extra/scrap/audio
+dev/extra/scrap/images
+dev/extra/scrap/videos
 
-# Ignore scrap PNGs (but include everything else, in case they need to be resurrected)
-dev/extra/scrap/*.png
+# Ignore media audio, images, and videos
+dev/media/audio
+dev/media/images
+dev/media/videos
 
 # Ignore vendor scripts
 dev/scripts/vendor

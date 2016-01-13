@@ -38,5 +38,6 @@
   "bugs": {
     "url": "https://github.com/beefchimi/gulp-config/issues"
   },
-  "homepage": "https://github.com/beefchimi/gulp-config"
+  "homepage": "https://github.com/beefchimi/gulp-config",
+  "license": "MIT"
 }
