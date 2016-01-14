@@ -170,8 +170,11 @@ gulp.task("misc", ["fonts", "audio", "videos"], () => {
 // Compile ES2015 javascript
 // -----------------------------------------------------------------------------
 gulp.task("scripts", () => {
+/*
   // this will run once because we set watch to false
   return buildScript("scripts.js", false);
+*/
+  console.log("Scripts have been disabled for now");
 });
 
 // Watch over Javascript files and reload the browser upon compilation
