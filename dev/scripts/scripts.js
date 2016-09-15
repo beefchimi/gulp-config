@@ -10,4 +10,5 @@ const docReady = require('document-ready-promise');
 // -----------------------------------------------------------------------------
 docReady().then(() => {
   // helperPolyfills();
+  console.log('we are ready!');
 });

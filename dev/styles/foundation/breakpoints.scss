@@ -1,0 +1,42 @@
+// ==|== breakpoints ===========================================================
+// =============================================================================
+
+// Maps
+// -----------------------------------------------------------------------------
+$breakpoint-data: (
+  portrait-mobile:   320px,
+  portrait-iphone6:  375px,
+  portrait-tablet:   768px,
+  portrait-720p:     720px,
+  portrait-1080p:   1080px,
+  portrait-imac:    1440px,
+  landscape-mobile:  480px,
+  landscape-iphone6: 667px,
+  landscape-tablet: 1024px,
+  landscape-720p:   1280px,
+  landscape-1080p:  1920px,
+  landscape-imac:   2560px,
+);
+
+// Functions
+// -----------------------------------------------------------------------------
+// Returns the breakpoint value for a given variant.
+// @param {String} $variant - The key for the given variant.
+// @return {Number} The breakpoint for the variant.
+@function breakpoint($variant: base) {
+  $fetched-value: map-get($breakpoint-data, $variant);
+
+  @if $fetched-value != null {
+    @return $fetched-value;
+  } @else {
+    @error "Breakpoint variant `#{$variant}` not found. Available variants: #{available-names($breakpoint-data)}";
+  }
+}
+
+// Mixins
+// -----------------------------------------------------------------------------
+@mixin breakpointMin($width) {
+  @media screen and (min-width: $width) {
+    @content;
+  }
+}

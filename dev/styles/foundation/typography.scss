@@ -1,0 +1,37 @@
+// ==|== typography =============================================================
+// =============================================================================
+
+// Mixins
+// -----------------------------------------------------------------------------
+@mixin truncate($display: block) {
+  display: $display;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  // padding-bottom: 0.25em;
+}
+
+// Helper Classes
+// -----------------------------------------------------------------------------
+.text-truncate {
+  @include truncate;
+}
+
+.text-truncate--inline-block {
+  @include truncate('inline-block');
+}
+
+.text-underline {
+  text-decoration: underline
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.text-wrap {
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-word;
+}

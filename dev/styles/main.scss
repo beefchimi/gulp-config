@@ -5,32 +5,21 @@
 // -----------------------------------------------------------------------------
 $hex-gray: #828282;
 
-// Foundation
+// Page
 // -----------------------------------------------------------------------------
 html {
-  @include htmlScrollLock;
-  font-family: 'brandon-txt';
+  // @include html-scroll-lock;
+
+  @include breakpointMin(breakpoint('portrait-tablet')) {
+    // stuff
+  }
 }
-body {
-  position: relative;
-  animation: animFade 600ms ease-in-out 60ms both;
-}
+
 main {
   @include container(128rem);
 }
+
 ::selection {
   color: white;
   background-color: blue;
-}
-
-@media only screen and (min-width: 568px) {
-}
-
-@media only screen and (min-width: 768px) {
-}
-
-@media only screen and (min-width: 1024px) {
-}
-
-@media only screen and (min-width: 1200px) {
 }

@@ -1,0 +1,87 @@
+// ==|== animation =============================================================
+// =============================================================================
+
+// Maps
+// -----------------------------------------------------------------------------
+$animation-duration-data: (
+  fast: 100ms,
+  base: 260ms,
+  slow: 600ms,
+);
+
+$animation-timing-data: (
+  base: ease-in-out,
+  in: cubic-bezier(0.36, 0, 1, 1),
+  out: cubic-bezier(0, 0, 0.42, 1),
+  in-out: cubic-bezier(0.64, 0, 0.35, 1),
+  excite: cubic-bezier(0.18, 0.67, 0.6, 1.22),
+  overshoot: cubic-bezier(0.07, 0.28, 0.32, 1.22),
+  anticipate: cubic-bezier(0.38, -0.4, 0.88, 0.65),
+);
+
+// Functions
+// -----------------------------------------------------------------------------
+// Returns the animation duration
+// @return {Duration} The animation duration value
+@function animation-duration($variant: base) {
+  $fetched-value: map-get($animation-duration-data, $variant);
+
+  @if $fetched-value {
+    @return $fetched-value;
+  } @else {
+    @error "Animation duration `#{$variant}` not found. Available durations: #{available-names($animation-duration-data)}";
+  }
+}
+
+// Returns the animation timing
+// @return {Timinig} The animation timing value
+@function animation-timing($variant: base) {
+  $fetched-value: map-get($animation-timing-data, $variant);
+
+  @if $fetched-value {
+    @return $fetched-value;
+  } @else {
+    @error "Animation timing `#{$variant}` not found. Available timings: #{available-names($animation-timing-data)}";
+  }
+}
+
+// Keyframes
+// -----------------------------------------------------------------------------
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hide {
+  0% {
+    left: 0;
+    opacity: 1;
+  }
+
+  99% {
+    left: 0;
+    opacity: 0;
+  }
+
+  100% {
+    left: -200%;
+    opacity: 0;
+  }
+}
+
+@keyframes svg-trace-stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

@@ -1,0 +1,42 @@
+// ==|== borders ===============================================================
+// =============================================================================
+
+// Maps
+// -----------------------------------------------------------------------------
+$borders-data: (
+  base: 0.1rem solid color(gray),
+  thick: 0.2rem solid color(charcoal),
+);
+
+$border-radius-data: (
+  tight: 0.1rem,
+  base: 0.3rem,
+  loose: 0.6rem,
+);
+
+// Functions
+// -----------------------------------------------------------------------------
+// Returns the default border.
+// @param {String} $variant The key for the border variant
+// @return {List} The border value.
+@function border($variant: base) {
+  $fetched-value: map-get($borders-data, $variant);
+
+  @if $fetched-value {
+    @return $fetched-value;
+  } @else {
+    @error "Border variant `#{$variant}` not found. Available variants: #{available-names($borders-data)}";
+  }
+}
+
+// Returns the default border radius
+// @return {Number} The border radius value
+@function border-radius($variant: base) {
+  $fetched-value: map-get($borders-radius-data, $variant);
+
+  @if $fetched-value {
+    @return $fetched-value;
+  } @else {
+    @error "Border variant `#{$variant}` not found. Available variants: #{available-names($borders-data)}";
+  }
+}

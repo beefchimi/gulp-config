@@ -1,12 +1,48 @@
-// ==|== funcs / mixs / vars ===================================================
+// ==|== utilities ===============================================================
 // =============================================================================
 
 // Functions
 // -----------------------------------------------------------------------------
+// Returns the list of available names in a given map.
+// @param {Map} $map - The map of data to list the names from.
+// @param {Number} $map - The level of depth to get names from.
+// @return {String} The list of names in the map.
+@function available-names($map, $level: 1) {
+  @if type-of($map) != 'map' { @return null; }
+
+  $output: '';
+  $newline: '\A ';
+
+  @if $level == 1 {
+    @each $key, $value in $map {
+      $output: $output + '#{$newline}- #{$key} #{available-names($value, $level + 1)}';
+    }
+  } @else {
+    $output: '(';
+    $i: 1;
+
+    @each $key, $value in $map {
+      $sep: if($i < length($map), ', ', '');
+      $output: $output + '#{$key}#{$sep}#{available-names($value, $level + 1)}';
+      $i: $i + 1;
+    }
+
+    $output: $output + ')';
+  }
+
+  @return $output;
+}
+
+// Returns any unitless number as a REM unit
+// @param {Number} $value - any number to be converted
+// @return {Number} The converted value in REM
 @function numToRem($number) {
   @return ($number / 10) + rem;
 }
 
+// Returns a unitless number
+// @param {Number} $value - any number to have its unit removed
+// @return {Number} The converted value as a number
 @function stripUnit($number) {
   @if type-of($number) == "number" and not unitless($number) {
     @return $number / ($number * 0 + 1);
@@ -15,20 +51,43 @@
   @return $number;
 }
 
-@function oppositeDirection($directions) {
+// Returns the value in rem for a given pixel value.
+// @param {Number} $value - The pixel value to be converted.
+// @return {Number} The converted value in rem.
+@function pxToRem($value) {
+  @if unit($value) != 'px' {
+    @error 'Value must be in px.';
+  }
+
+  @return $value / $base-font-size * 1rem;
+}
+
+// Returns the value in pixels for a given rem value.
+// @param {Number} $value - The rem value to be converted.
+// @return {Number} The converted value in pixels.
+@function px($value) {
+  @if unit($value) != 'rem' {
+    @error 'Value must be in rem.';
+  }
+
+  @return ($value / 1rem) * $base-font-size;
+}
+
+// Returns the opposite direction
+// @param {String} $direction
+// @return {String} The opposite direction
+@function opposite-direction($directions) {
   $opposite-directions: ();
   $direction-map: (
-    'top':    'bottom',
-    'right':  'left',
-    'bottom': 'top',
-    'left':   'right',
-    'center': 'center',
-    'ltr':    'rtl',
-    'rtl':    'ltr'
+    top: 'bottom',
+    right: 'left',
+    bottom: 'top',
+    left: 'right'
   );
 
   @each $direction in $directions {
     $direction: to-lower-case($direction);
+
     @if map-has-key($direction-map, $direction) {
       $opposite-directions: append($opposite-directions, unquote(map-get($direction-map, $direction)));
     } @else {
@@ -41,13 +100,20 @@
 
 // Mixins
 // -----------------------------------------------------------------------------
-@mixin mediaMinWidth($min-width) {
-  @media screen and (min-width: $min-width) {
-    @content;
+@mixin page-scroll-lock {
+  &,
+  body {
+    height: 100%;
+  }
+
+  &[data-scrollable="locked"],
+  &[data-scrollable="locked"] body {
+    overflow: hidden;
+    max-height: 100vh;
   }
 }
 
-@mixin toggleVisibility($state) {
+@mixin visibility($state) {
   @if ($state == "off") or ($state == "none") or ($state == "hide") or ($state == "hidden") {
     opacity: 0;
     visibility: hidden;
@@ -57,24 +123,7 @@
   }
 }
 
-@mixin container($max-width: none) {
-  @if $max-width == "" or $max-width == none or $max-width == "none" or $max-width == "reset" {
-    margin-left: 0;
-    margin-right: 0;
-    max-width: none;
-  } @else if $max-width == "reset-margin" or $max-width == "reset-margins" {
-    margin-left: 0;
-    margin-right: 0;
-    max-width: 100%;
-  } @else {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: $max-width;
-    // max-width: numToRem($max-width);
-  }
-}
-
-@mixin posCover($position: static, $index: 1) {
+@mixin position-cover($position: absolute, $index: 1) {
   @if not index(static relative absolute fixed sticky reset, $position) {
     @error "Positions can be: `static`, `relative`, `absolute`, `fixed`, `sticky`, or `reset`.";
   }
@@ -98,58 +147,43 @@
   }
 }
 
-@mixin bgCover($bgImg: none, $bgColor: transparent) {
-  @if $bgImg != none or $bgImg != "" {
-    background-image: url($bgImg);
+@mixin background-cover($image: none, $color: transparent) {
+  @if $image != none or $image != "" {
+    background-image: url($image);
   }
 
-  background-color: $bgColor;
+  background-color: $color;
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
   background-size: cover;
 }
 
-@mixin flexCenter($fullHeight: false) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-
-  @if $fullHeight {
-    height: 100vh;
-  }
+@mixin _aspect-ratio-padding-top($padding: 0%) {
+  padding-top: $padding;
+  width: 100%;
+  height: 0;
 }
 
-@mixin aspectRatio($width, $height) {
+@mixin aspect-ratio($width-integer, $height-integer, $pseudo: false) {
+  $ratio-percentage: ($height-integer / $width-integer) * 100%;
+
   position: relative;
+  overflow: hidden;
 
-  &::before {
-    display: block;
-    content: '';
-    width: 100%;
-    padding-top: ($height / $width) * 100%;
-  }
+  @if ($pseudo) {
+    &::before {
+      @include _aspect-ratio-padding-top($ratio-percentage);
+      content: '';
+      display: block;
+    }
 
-  > * {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-}
-@mixin htmlScrollLock {
-  &,
-  body {
-    height: 100%;
-  }
-
-  &[data-scrollable="locked"],
-  &[data-scrollable="locked"] body {
-    overflow: hidden;
-    max-height: 100vh;
+    // selector will not include pseudo elements
+    > * {
+      @include cover(absolute);
+    }
+  } @else {
+    @include _aspect-ratio-padding-top($ratio-percentage);
   }
 }
 
@@ -163,7 +197,7 @@
   // z-index: 2;
   width: 0;
   height: 0;
-  border-#{oppositeDirection($direction)}: ($size * 1.5) solid $color;
+  border-#{opposite-direction($direction)}: ($size * 1.5) solid $color;
 
   $perpendicular-borders: $size solid transparent;
   @if $direction == top or $direction == bottom {
@@ -175,7 +209,7 @@
   }
 }
 
-@mixin svgArrow ($color, $position: up) {
+@mixin svg-arrow ($color, $position: up) {
   $degrees: 0;
   // should allow for passing in dimensions
   $height:  0.6rem;
@@ -199,7 +233,7 @@
   background-size: 100% auto;
 }
 
-@mixin linkUnderline($bottom: 0, $height: 0.1rem) {
+@mixin link-underline($bottom: 0, $height: 0.1rem) {
   position: relative;
 
   &::before {
@@ -226,17 +260,19 @@
 */
 }
 
-// Variables
+// Helper Classes
 // -----------------------------------------------------------------------------
-$vwMobilePortrait:   320px;
-$vwMobileLandscape:  480px;
-$vwIphone6Portrait:  375px;
-$vwIphone6Landscape: 667px;
-$vwTabletPortrait:   768px;
-$vwTabletLandscape: 1024px;
-$vw720pPortrait:     720px;
-$vw720pLandscape:   1280px;
-$vw1080pPortrait:   1080px;
-$vw1080pLandscape:  1920px;
-$vwImacPortrait:    1440px;
-$vwImacLandscape:   2560px;
+.hidden {
+  display: none !important;
+}
+
+.visuallyhidden {
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+  position: absolute;
+  margin: -.1rem;
+  padding: 0;
+  width: .1rem;
+  height: .1rem;
+  border: 0
+}

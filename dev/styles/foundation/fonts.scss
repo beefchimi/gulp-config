@@ -1,0 +1,20 @@
+// ==|== fonts =================================================================
+// =============================================================================
+
+// Custom Fonts
+// -----------------------------------------------------------------------------
+@font-face {
+  font-family: 'brandon-txt';
+  src: url('../fonts/brandon-txt_reg.woff2') format('woff2'),
+       url('../fonts/brandon-txt_reg.woff') format('woff');
+   font-weight: 400;
+   font-style: normal;
+}
+
+@font-face {
+  font-family: 'brandon-txt';
+  src: url('../fonts/brandon-txt_blk.woff2') format('woff2'),
+       url('../fonts/brandon-txt_blk.woff') format('woff');
+   font-weight: 700;
+   font-style: normal;
+}
