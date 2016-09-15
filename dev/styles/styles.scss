@@ -1,4 +1,7 @@
 // One stylesheet to rule them all
 // ----------------------------------------------------------------------------
-@import 'base';
-@import 'main';
+@import '1-reset';
+@import '2-base';
+@import '3-sass';
+@import '4-main';
+@import '5-queries';

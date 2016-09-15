@@ -1,0 +1,374 @@
+// ==|== main styles ===========================================================
+// =============================================================================
+
+// Variables
+// -----------------------------------------------------------------------------
+$hex-gray: #828282;
+$hex-foam: #96c9af;
+$hex-pink: #f76ba3;
+// scene colours
+$hex-age:        #ffb0c6;
+$hex-challenges: #65102d;
+$hex-churn:      #ff8f5e;
+$hex-gender:     #b1eb99;
+$hex-love:       #ffb389;
+$hex-ptft:       #ffe903;
+$hex-retail:     #ab80ff;
+$hex-sales:      #8bedff;
+$hex-staff:      #00e9a1;
+$hex-years:      #e4e9a1;
+// scene lists
+$scenes-names:  age challenges churn gender love ptft retail sales staff years;
+$scenes-colors: $hex-age $hex-challenges $hex-churn $hex-gender $hex-love $hex-ptft $hex-retail $hex-sales $hex-staff $hex-years;
+
+// Foundation
+// -----------------------------------------------------------------------------
+html {
+  @include htmlScrollLock;
+  font-family: 'brandon-txt';
+}
+body {
+  position: relative;
+  animation: animFade 600ms ease-in-out 60ms both;
+}
+main {
+  @include container(128rem);
+}
+::selection {
+  color: $hex-white;
+  background-color: $hex-blue--light;
+}
+
+// Controls List
+// -----------------------------------------------------------------------------
+.controls {
+  @include posCover(absolute);
+  @include toggleVisibility(off);
+  pointer-events: none;
+  padding: 3.2rem;
+  background-color: hsla(0,0%,0%,0.9);
+  transition-property: opacity, visibility;
+  transition-duration: 400ms;
+  transition-timing-function: ease-in-out;
+}
+.controls-list {
+  max-width: 72rem;
+  transform: scale(0.8);
+  transition: transform 400ms ease-in-out;
+}
+.controls-list__item {
+  margin-bottom: 4.8rem; // 6.4rem;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+.controls-list__btn {
+  font-size: 1.8rem; // 2rem;
+  font-weight: 700;
+  letter-spacing: -0.1rem;
+  line-height: 1.2;
+  color: $hex-staff; // color: $hex-white;
+  transition: color 260ms ease-in-out;
+  &:hover {
+    color: $hex-yellow; // $hex-red;
+  }
+  &:active {
+    color: $hex-yellow--dark;
+  }
+}
+// --- Controls Heading --- \\
+[data-scenes="question"] {
+  margin-bottom: 6.4rem;
+  font-size: 1.8rem; // 2rem;
+  font-weight: 700;
+  letter-spacing: -0.1rem;
+  line-height: 1.2;
+  color: $hex-white;
+  opacity: 0;
+  transition: opacity 400ms ease-in-out;
+}
+
+// Page Header
+// -----------------------------------------------------------------------------
+.page-header {
+  text-align: center;
+  background-color: $hex-foam;
+}
+.page-header__interior {
+  @include container(120rem);
+}
+.page-header__masthead {
+  @include container(108rem);
+  padding: 3.2rem 1.6rem;
+  background-color: $hex-white;
+  h1 {
+    margin-bottom: 2rem;
+    font-size: 2.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: $hex-pink;
+  }
+  p {
+    margin-bottom: 1.6rem;
+    font-size: 1.6rem;
+    line-height: 1.2;
+    color: $hex-gray;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+.page-header__bg {
+  display: none;
+}
+
+// Main Navigation
+// -----------------------------------------------------------------------------
+.nav-scenes {
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
+}
+[data-scenes="master"] {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -1.6rem;
+  margin-bottom: -1.6rem;
+}
+[data-scenes="item"] {
+  @extend .flex-fix;
+  flex: 1 1 22rem;
+  padding-left: 1.6rem;
+  padding-bottom: 1.6rem;
+}
+[data-scenes="activator"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: $hex-black;
+  background-color: $hex-black;
+  overflow: hidden;
+  transition: opacity 260ms ease-in-out;
+  &,
+  > * {
+    backface-visibility: hidden;
+  }
+  > * {
+    @extend .flex-fix;
+    flex: 1 1 100%;
+  }
+  [data-scenes="thumbnail"] {
+    transform: scale(1);
+    // filter: blur(0);
+    transition: transform 400ms ease-in-out, filter 400ms ease-in-out, opacity 260ms ease-in-out;
+  }
+  .wrap__heading {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    height: 4.8rem;
+    text-align: center;
+    background-color: rgba($hex-white, 0.8);
+    transition: background-color 400ms ease-in-out;
+    h2 {
+      @extend .flex-fix;
+      flex: 1 1 100%;
+      font-size: 1.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      transition: opacity 400ms ease-in-out;
+    }
+  }
+  .ui-checkmark {
+    position: absolute;
+    bottom: 0.8rem;
+    left: 50%;
+    margin-left: -1.6rem;
+    pointer-events: none;
+    width: 3.2rem;
+    height: 3.2rem;
+    fill: $hex-blue;
+    opacity: 0;
+    transform: translateY(100%);
+    transition-property: opacity, transform;
+    transition-duration: 260ms;
+    transition-timing-function: ease-in-out;
+  }
+  &:hover {
+    [data-scenes="thumbnail"] {
+      transform: scale(1.05);
+      // filter: blur(0.2rem);
+    }
+    .wrap__heading {
+      background-color: rgba($hex-white, 1);
+    }
+  }
+  &:active {
+    opacity: 0.9;
+  }
+}
+// --- Completed State --- \\
+[data-scenes-completed="true"] {
+  pointer-events: none;
+  [data-scenes="thumbnail"] {
+    transform: scale(1.05);
+    filter: blur(0.2rem);
+    opacity: 0.4;
+  }
+  .wrap__heading {
+    // background-color: rgba($hex-white, 1);
+    h2 {
+      opacity: 0;
+    }
+  }
+  .ui-checkmark {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Overlay
+// -----------------------------------------------------------------------------
+[data-overlay="idle"] {
+  // inital page load only, prevent interference with page elements
+  opacity: 0;
+  visibility: hidden;
+  z-index: -1;
+}
+[data-overlay="hidden"] {
+  animation: animHide 400ms ease-in-out both;
+}
+[data-overlay="visible"] {
+  animation: animFade 400ms ease-in-out both;
+}
+
+// Video Components
+// -----------------------------------------------------------------------------
+// should really use a class for this
+[data-video="interior"],
+[data-video="controls"],
+[data-scenes="options"],
+[data-scenes="card"] {
+  @include flexCenter();
+  width: 100%;
+  height: 100%;
+}
+[data-video="interior"] {
+  position: static;
+  z-index: 100;
+  video {
+    cursor: pointer;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    &[data-video="fail"],
+    &[data-video="success"] {
+      display: none;
+    }
+  }
+}
+[data-video="controls"] {
+  z-index: 200;
+}
+[data-scenes="options"] {
+  z-index: 300;
+}
+[data-scenes="card"] {
+  // can't use visibility for hiding - conflics with child SVG animation
+  // using -1 z-index instead to keep behind layers until needed...
+  // this should be okay given the card is the final frame before closing overlay
+  @include posCover(absolute, -1);
+  opacity: 0;
+  padding: 1rem;
+  background-color: $hex-black; // default colour
+  // delay transition by 2000ms to allow success video to be visible long enough
+  transition: opacity 600ms ease-in-out 2000ms;
+  .wrap__svg {
+    width: 100%;
+    max-width: 86.8rem;
+    transform: scale(0.8); // begin at 80%, animCardZoom will animate to full size
+    animation: none; // reset to 'none' once data-state!='card' on overlay transitionEnd
+  }
+  // --- Scene Backgrounds --- \\
+  @each $current-scene in $scenes-names {
+    $i: index($scenes-names, $current-scene);
+    [data-video-queue="#{$current-scene}"] &  {
+      background-color: nth($scenes-colors, $i);
+    }
+  }
+}
+
+// VideoMaster
+// -----------------------------------------------------------------------------
+[data-video="master"] {
+  // consider replacing animHide with a transition,
+  // toggling .hidden on transitionEnd
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  width: 100%;  // cannot use right:  0; because of animHide
+  height: 100%; // cannot use bottom: 0; because of animHide
+  background-color: $hex-black;
+  &[data-video-state="fail"],
+  &[data-video-state="success"] {
+    [data-video="scene"] {
+      display: none;
+    }
+  }
+  &[data-video-state="fail"] {
+    [data-video="fail"] {
+      display: block;
+    }
+  }
+  &[data-video-state="success"] {
+    [data-video="success"] {
+      display: block;
+    }
+  }
+  &[data-video-state="paused"] [data-video="controls"],
+  &[data-video-state="ended"] [data-scenes="options"] {
+    @include toggleVisibility(on);
+    pointer-events: auto;
+    .controls-list {
+      transform: scale(1);
+    }
+    [data-scenes="question"] {
+      opacity: 1;
+    }
+  }
+  &[data-video-state="ended"] [data-scenes="options"] {
+    [data-scenes="question"] {
+      opacity: 1;
+    }
+  }
+  // adding fail here...
+  // as we now want to show the display card regardless of chosen response
+  &[data-video-state="fail"],
+  &[data-video-state="success"] {
+    [data-scenes="card"] {
+      z-index: 400;
+      opacity: 1; // cannot use visibility as it will conflict with SVG animation
+      .wrap__svg {
+        // begin zoom animation as soon as success video starts playing,
+        // delay by 2000ms before fading in
+        animation: animCardZoom 7200ms linear 2000ms forwards;
+      }
+    }
+  }
+  // required to prevent responses fading back in after a failed response...
+  // fail video should end and immediately return to a visible response screen
+  &[data-video-state="fail"] {
+    [data-video="options"] {
+      display: none;
+      opacity: 1;
+      visibility: visible;
+      .controls-list {
+        transform: scale(1);
+      }
+    }
+  }
+}

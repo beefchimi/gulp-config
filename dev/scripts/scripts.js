@@ -1,6 +1,13 @@
-import FlashMessage from "./example-module";
+// Global variables that do not require document ready
+// -----------------------------------------------------------------------------
+const docReady = require('document-ready-promise');
 
-let flash = new FlashMessage("Gulp, Babel and Browserify");
-flash.display();
+// Module imports
+// -----------------------------------------------------------------------------
+// import {helperPolyfills} from './modules/helpers';
 
-console.log('love bug jiggle thug ugg ugg');
+// Document Ready
+// -----------------------------------------------------------------------------
+docReady().then(() => {
+  // helperPolyfills();
+});

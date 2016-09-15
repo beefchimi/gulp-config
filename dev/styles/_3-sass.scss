@@ -1,0 +1,290 @@
+// ==|== funcs / mixs / vars ===================================================
+// =============================================================================
+
+// Functions
+// -----------------------------------------------------------------------------
+@function numToRem($number) {
+  @return ($number / 10) + rem;
+}
+@function stripUnit($number) {
+  @if type-of($number) == "number" and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+  @return $number;
+}
+@function oppositeDirection($directions) {
+  $opposite-directions: ();
+  $direction-map: (
+    'top':    'bottom',
+    'right':  'left',
+    'bottom': 'top',
+    'left':   'right',
+    'center': 'center',
+    'ltr':    'rtl',
+    'rtl':    'ltr'
+  );
+  @each $direction in $directions {
+    $direction: to-lower-case($direction);
+    @if map-has-key($direction-map, $direction) {
+      $opposite-directions: append($opposite-directions, unquote(map-get($direction-map, $direction)));
+    } @else {
+      @warn "No opposite direction can be found for `#{$direction}`. Direction omitted.";
+    }
+  }
+  @return $opposite-directions;
+}
+
+// Mixins
+// -----------------------------------------------------------------------------
+@mixin mediaMinWidth($min-width) {
+  @media screen and (min-width: $min-width) {
+    @content;
+  }
+}
+@mixin toggleVisibility($state) {
+  @if ($state == "off") or ($state == "none") or ($state == "hide") or ($state == "hidden") {
+    opacity: 0;
+    visibility: hidden;
+  } @else {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+@mixin container($max-width: none) {
+  @if $max-width == "" or $max-width == none or $max-width == "none" or $max-width == "reset" {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: none;
+  } @else if $max-width == "reset-margin" or $max-width == "reset-margins" {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+  } @else {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: $max-width;
+    // max-width: numToRem($max-width);
+  }
+}
+@mixin posCover($pos: static, $index: 1) {
+  z-index: $index;
+  @if $pos == "reset" {
+    position: static;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    margin: 0;
+  } @else {
+    position: $pos;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+  }
+}
+@mixin bgCover($bgImg: none, $bgColor: transparent) {
+  @if $bgImg != none or $bgImg != "" {
+    background-image: url($bgImg);
+  }
+  background-color: $bgColor;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+@mixin flexCenter($fullHeight: false) {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	text-align: center;
+  @if $fullHeight {
+    height: 100vh;
+  }
+}
+@mixin aspectRatio($width, $height) {
+  position: relative;
+  &::before {
+    display: block;
+    content: '';
+    width: 100%;
+    padding-top: ($height / $width) * 100%;
+  }
+  > * {
+    @include posCover(absolute);
+  }
+}
+@mixin htmlScrollLock {
+  &,
+  body {
+    height: 100%;
+  }
+  &[data-scrollable="locked"],
+  &[data-scrollable="locked"] body {
+    overflow: hidden;
+    max-height: 100vh;
+  }
+}
+@mixin triangle($direction, $color: currentColor, $size: 1em) {
+  @if not index(top right bottom left, $direction) {
+    @error "Direction must be either `top`, `right`, `bottom` or `left`.";
+  }
+  content: '';
+  // display: block;
+  // z-index: 2;
+  width: 0;
+  height: 0;
+  border-#{oppositeDirection($direction)}: ($size * 1.5) solid $color;
+  $perpendicular-borders: $size solid transparent;
+  @if $direction == top or $direction == bottom {
+    border-left:   $perpendicular-borders;
+    border-right:  $perpendicular-borders;
+  } @else if $direction == right or $direction == left {
+    border-bottom: $perpendicular-borders;
+    border-top:    $perpendicular-borders;
+  }
+}
+@mixin svgArrow ($color, $position: up) {
+  $degrees: 0;
+  // should allow for passing in dimensions
+  $height:  0.6rem;
+  $width:   1.8rem;
+  @if ($position == down) {
+    $degrees: 180 18 6;
+  } @else if ($position == left) {
+    $degrees: -90 18 18;
+    $width:   0.6rem;
+    $height:  1.8rem;
+  } @else if ($position == right) {
+    $degrees: 90 6 6;
+    $width:   0.6rem;
+    $height:  1.8rem;
+  }
+  background: no-repeat url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="#{$width * 2}" height="#{$height * 2}"><path fill="#{$color}" transform="rotate(#{$degrees})" d="M2.658,0.000 C-13.615,0.000 50.938,0.000 34.662,0.000 C28.662,0.000 23.035,12.002 18.660,12.002 C14.285,12.002 8.594,0.000 2.658,0.000 Z"/></svg>');
+  background-size: 100% auto;
+  width: $width;
+  height: $height;
+}
+@mixin linkUnderline($bottom: 0, $height: 0.1rem) {
+  position: relative;
+  &::before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    bottom: $bottom;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    height: $height;
+    background-color: currentColor;
+    opacity: 0;
+    transition: opacity 260ms ease-in-out;
+  }
+  /*
+  &:hover {
+    &::before {
+      opacity: 1;
+    }
+  }
+  */
+}
+
+// Viewport widths
+// -----------------------------------------------------------------------------
+$vwMobilePortrait:   320px;
+$vwMobileLandscape:  480px;
+$vwIphone6Portrait:  375px;
+$vwIphone6Landscape: 667px;
+$vwTabletPortrait:   768px;
+$vwTabletLandscape: 1024px;
+$vw720pPortrait:     720px;
+$vw720pLandscape:   1280px;
+$vw1080pPortrait:   1080px;
+$vw1080pLandscape:  1920px;
+$vwImacPortrait:    1440px;
+$vwImacLandscape:   2560px;
+
+// Colours
+// -----------------------------------------------------------------------------
+$hex-black:            #000000;
+// --- Sky --- \\
+$hex-white:            #ffffff;
+$hex-sky--lighter:     #fafbfc;
+$hex-sky--light:       #f5f6f7;
+$hex-sky:              #ebeef0;
+$hex-sky--dark:        #d3dbe2;
+$hex-sky--darker:      #c3cfd8;
+// --- Slate --- \\
+$hex-slate--lightest:  #95a7b7;
+$hex-slate--lighter:   #798c9c;
+$hex-slate--light:     #454e57;
+$hex-slate:            #31373d;
+$hex-slate--dark:      #272c30;
+$hex-slate--darker:    #212529;
+// --- Blue --- \\
+$hex-blue--lightest:   #eff9fd;
+$hex-blue--lighter:    #cae9f7;
+$hex-blue--light:      #4fb0e8;
+$hex-blue:             #479ccf;
+$hex-blue--dark:       #4293c2;
+$hex-blue--darker:     #3e89b5;
+// --- Green --- \\
+$hex-green--lightest:  #f8ffec;
+$hex-green--lighter:   #e5fabc;
+$hex-green--light:     #b2d86a;
+$hex-green:            #96bf48;
+$hex-green--dark:      #7ba232;
+$hex-green--darker:    #4d6110;
+// --- Yellow --- \\
+$hex-yellow--lightest: #fffbe9;
+$hex-yellow--lighter:  #fff7b2;
+$hex-yellow--light:    #ffe477;
+$hex-yellow:           #ffd117;
+$hex-yellow--dark:     #d4a002;
+$hex-yellow--darker:   #6f4f0c;
+// --- Orange --- \\
+$hex-orange--lightest: #fff9ec;
+$hex-orange--lighter:  #ffebcc;
+$hex-orange--light:    #fec97d;
+$hex-orange:           #ff9517;
+$hex-orange--dark:     #e06b0c;
+$hex-orange--darker:   #7f3a07;
+// --- Red --- \\
+$hex-red--lightest:    #fef6f5;
+$hex-red--lighter:     #ffd9d6;
+$hex-red--light:       #ff9797;
+$hex-red:              #ff5d5d;
+$hex-red--dark:        #d83e3e;
+$hex-red--darker:      #852929;
+// --- Purple --- \\
+$hex-purple--lightest: #faf1fe;
+$hex-purple--lighter:  #eccdff;
+$hex-purple--light:    #d098ff;
+$hex-purple:           #b762ff;
+$hex-purple--dark:     #763eaf;
+$hex-purple--darker:   #4a1f72;
+// --- Teal --- \\
+$hex-teal--lightest:   #eafdf7;
+$hex-teal--lighter:    #c3f9e4;
+$hex-teal--light:      #78ecbc;
+$hex-teal:             #29bc94;
+$hex-teal--dark:       #15966d;
+$hex-teal--darker:     #186148;
+// --- Marketing --- \\
+$marketing-yellow:     #ebb129;
+$marketing-blue:       #368aa9;
+$marketing-green:      #7ab55c;
+// --- Sello --- \\
+$sello-green:          #2cc699;
+$facebook-blue:        #3b5998;
+$twitter-blue:         #55acee;
+// --- Shopify --- \\
+$shopify-primary:      $hex-green;
+$shopify-secondary:    #5e8e3e;
+
+// Easings
+// -----------------------------------------------------------------------------
+// $ease-timing--in-quart: cubic-bezier(0.895, 0.030, 0.685, 0.220);

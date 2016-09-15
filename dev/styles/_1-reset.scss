@@ -1,23 +1,12 @@
 // ==|== reset =================================================================
 // =============================================================================
 
-// HTML5 Display Definitions
-// -----------------------------------------------------------------------------
-/*
-article, aside, figcaption, figure, footer, header, main, nav, section { display: block; }
-audio, video { display: inline-block; vertical-align: baseline; }
-audio:not([controls]) { display: none; height: 0; }
-[hidden], template { display: none; }
-*/
-
 // Base
 // -----------------------------------------------------------------------------
-html { box-sizing: border-box; font-size: 62.5%; text-size-adjust: 100%; -webkit-tap-highlight-color: rgba(0,0,0,0); }
+html { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif; font-size: 62.5%; text-size-adjust: 100%; -webkit-tap-highlight-color: rgba(0,0,0,0); }
 *, *::before, *::after { box-sizing: inherit; }
-html, button, input, optgroup, select, textarea { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-// html, body { overflow-x: hidden; }
+// html, button, input, optgroup, select, textarea { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 body { margin: 0; line-height: 1; }
-// html * { line-height: 1; }
 @viewport { width: device-width }
 
 // Links
@@ -28,8 +17,8 @@ a:active, a:hover { outline: 0; }
 
 // Typography
 // -----------------------------------------------------------------------------
-h1, h2, h3, h4, h5, h6, p, ul, ol, li { margin: 0; padding: 0; font-weight: 400; font-style: normal; } // removed line-height: 1; and set it to (html * or body)?
-strong { font-weight: 700; } // changed from 'bold' just to be safe: using Brandon Text
+h1, h2, h3, h4, h5, h6, p, ul, ol, li { margin: 0; padding: 0; font-weight: 400; font-style: normal; }
+strong { font-weight: 700; } // CHANGED FROM 'bold' ... using webfont
 small { font-size: 80%; }
 sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
 sup { top: -0.5em; }
@@ -77,7 +66,6 @@ button, input, select, textarea { border-radius: 0; } // added by me
 [tabindex="-1"]:focus { outline: none !important; } // prevent focus outline on elements that cant be accessed via keyboard
 // remove red border for invalid entries
 select:focus { outline: 0; } // border: none;
-&:-moz-focusring { color: transparent; text-shadow: 0 0 0 #31373d; } // what in the blood heck is the deal with this?
 input, input:focus, input:invalid, button:focus { box-shadow: none; }
 ::-webkit-input-placeholder { box-shadow: none; }
 ::-moz-placeholder { box-shadow: none; }
